@@ -155,7 +155,10 @@ public class PresetEditScreen extends BaseScreen {
 
         if (this.hoveredTooltip != null && this.popup == POPUP_NONE) {
             graphics.flush();
+            graphics.pose().pushPose();
+            graphics.pose().translate(0.0F, 0.0F, 400.0F);
             graphics.drawString(this.font, this.hoveredTooltip, mouseX + 8, mouseY - 12, UiKit.TEXT_DIM, false);
+            graphics.pose().popPose();
         }
     }
 
@@ -194,8 +197,10 @@ public class PresetEditScreen extends BaseScreen {
         if (this.popup == POPUP_NONE) {
             return;
         }
-        // 规则行里的方块图标走独立的 RenderType，批次可能晚于 gui 批次刷新，先提交一次保证弹窗在上层
+        // 方块图标在 z=150 绘制（越大越靠近镜头），弹窗必须抬到更高层才不会被压住
         graphics.flush();
+        graphics.pose().pushPose();
+        graphics.pose().translate(0.0F, 0.0F, 300.0F);
         graphics.fill(this.popupX, this.popupY, this.popupX + this.popupW, this.popupY + this.popupH, 0xF0101418);
         graphics.fill(this.popupX, this.popupY, this.popupX + this.popupW, this.popupY + 1, UiKit.PANEL_BORDER);
         graphics.fill(this.popupX, this.popupY + this.popupH - 1, this.popupX + this.popupW,
@@ -221,6 +226,7 @@ public class PresetEditScreen extends BaseScreen {
                     graphics.fill(cellX, cellY, cellX + 16, cellY + 17, 0x40FFFFFF);
                 }
             }
+            graphics.pose().popPose();
             return;
         }
 
@@ -242,6 +248,7 @@ public class PresetEditScreen extends BaseScreen {
             graphics.drawString(this.font, label, textX + 10, rowY + 4,
                     current ? UiKit.ACCENT : UiKit.TEXT, false);
         }
+        graphics.pose().popPose();
     }
 
     private RuleEntry ruleAt(int index) {

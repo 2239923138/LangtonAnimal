@@ -148,6 +148,8 @@ public class PresetListScreen extends BaseScreen {
         String name = this.pendingDelete < presets().size()
                 ? presets().get(this.pendingDelete).name() : "";
         graphics.flush();
+        graphics.pose().pushPose();
+        graphics.pose().translate(0.0F, 0.0F, 300.0F);
         graphics.fill(0, 0, this.width, this.height, 0x99000000);
         int dialogW = 260;
         int dialogH = 92;
@@ -169,6 +171,7 @@ public class PresetListScreen extends BaseScreen {
         boolean cancelHovered = UiKit.inside(mouseX, mouseY, x + dialogW - 70, buttonY, 58, 18);
         UiKit.button(graphics, this.font, x + dialogW - 70, buttonY, 58, 18,
                 Component.translatable("langtonanimal.gui.cancel"), cancelHovered, true);
+        graphics.pose().popPose();
     }
 
     @Override
