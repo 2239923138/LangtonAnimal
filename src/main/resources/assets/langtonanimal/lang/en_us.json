@@ -71,6 +71,8 @@
   "langtonanimal.color.brown": "Brown",
   "langtonanimal.color.gold": "Gold",
   "langtonanimal.msg.summoned": "Summoned %s with preset %s",
+  "langtonanimal.msg.no_ground": "No standable ground within 64 blocks below",
+  "langtonanimal.msg.no_space": "Not enough space at the landing spot",
   "langtonanimal.msg.preset_missing": "Preset not found: %s",
   "langtonanimal.msg.name_taken": "Name already in use: %s",
   "langtonanimal.msg.entity_invalid": "Invalid carrier mob: %s",

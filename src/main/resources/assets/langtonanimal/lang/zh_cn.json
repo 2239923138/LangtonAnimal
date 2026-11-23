@@ -71,6 +71,8 @@
   "langtonanimal.color.brown": "棕色",
   "langtonanimal.color.gold": "金色",
   "langtonanimal.msg.summoned": "已召唤 %s（预设：%s）",
+  "langtonanimal.msg.no_ground": "下方 64 格内找不到可站立的地面",
+  "langtonanimal.msg.no_space": "落脚点空间不足，无法放置该生物",
   "langtonanimal.msg.preset_missing": "找不到预设：%s",
   "langtonanimal.msg.name_taken": "名字已被占用：%s",
   "langtonanimal.msg.entity_invalid": "载体生物无效：%s",

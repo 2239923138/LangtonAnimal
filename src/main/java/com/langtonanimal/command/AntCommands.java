@@ -35,6 +35,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
 /**
@@ -142,7 +143,14 @@ public final class AntCommands {
             source.sendFailure(Component.translatable("langtonanimal.msg.entity_invalid", preset.entityType()));
             return 0;
         }
-        BlockPos pos = BlockPos.containing(source.getPosition());
+        BlockPos origin = BlockPos.containing(source.getPosition());
+        SpawnResult spawn = findSpawnCell(level, origin, mob);
+        if (spawn.cell() == null) {
+            source.sendFailure(Component.translatable(spawn.groundFound()
+                    ? "langtonanimal.msg.no_space" : "langtonanimal.msg.no_ground"));
+            return 0;
+        }
+        BlockPos pos = spawn.cell();
         mob.moveTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, facing.toYRot(), 0.0F);
 
         AntEntityData data = new AntEntityData();
@@ -282,6 +290,37 @@ public final class AntCommands {
             source.sendSuccess(() -> finalLine, false);
         }
         return records.size();
+    }
+
+    /** 召唤落点：从执行者所在格向下找最近的可站立地面。 */
+    private record SpawnResult(BlockPos cell, boolean groundFound) {
+        static SpawnResult none(boolean ground) {
+            return new SpawnResult(null, ground);
+        }
+
+        static SpawnResult at(BlockPos cell) {
+            return new SpawnResult(cell, true);
+        }
+    }
+
+    private static SpawnResult findSpawnCell(ServerLevel level, BlockPos origin, Mob mob) {
+        for (int dy = 0; dy <= 64; dy++) {
+            BlockPos ground = origin.below(dy);
+            if (!level.isLoaded(ground)) {
+                return SpawnResult.none(false);
+            }
+            if (!level.getBlockState(ground).isFaceSturdy(level, ground, net.minecraft.core.Direction.UP)) {
+                continue;
+            }
+            BlockPos cell = ground.above();
+            AABB box = mob.getDimensions(mob.getPose())
+                    .makeBoundingBox(cell.getX() + 0.5D, cell.getY(), cell.getZ() + 0.5D);
+            if (level.noCollision(mob, box)) {
+                return SpawnResult.at(cell);
+            }
+            return SpawnResult.none(true);
+        }
+        return SpawnResult.none(false);
     }
 
     // ----------------------------------------------------------------- helpers

@@ -60,7 +60,7 @@
 
 | 命令 | 说明 |
 | :--- | :--- |
-| `/langtona summon <预设> <生物名> [朝向] [速度]` | 在你脚下召唤一只，朝向 north/south/east/west，速度单位为步/秒 |
+| `/langtona summon <预设> <生物名> [朝向] [速度]` | 召唤一只，自动落到下方最近的可站立地面；朝向 north/south/east/west，速度单位为步/秒 |
 | `/langtona start <名称>` | 启动；名称可以是生物名、预设名或 `all` |
 | `/langtona stop <名称>` | 停止；同上 |
 | `/langtona speed <名称> <步/秒>` | 设置速度，1 ~ 1280；同上 |
