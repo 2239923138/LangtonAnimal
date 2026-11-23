@@ -6,6 +6,7 @@
   "langtonanimal.gui.reset_default": "Reset to grass",
   "langtonanimal.gui.rules": "rules",
   "langtonanimal.gui.edit": "Edit",
+  "langtonanimal.gui.copy": "Copy",
   "langtonanimal.gui.delete": "Delete",
   "langtonanimal.gui.empty_list": "No presets yet. Click \"New preset\" to start.",
   "langtonanimal.gui.new_preset": "+ New preset",

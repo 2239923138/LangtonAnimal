@@ -83,22 +83,26 @@ public class PresetListScreen extends BaseScreen {
                     rowHovered ? UiKit.ROW_BG_HOVER : UiKit.ROW_BG);
             graphics.fill(this.panelLeft + 6, rowY, this.panelLeft + 9, rowY + ROW_H - 2,
                     0xFF000000 | preset.color());
+            int editX = this.panelLeft + PANEL_W - 168;
+            int copyX = this.panelLeft + PANEL_W - 112;
+            int deleteX = this.panelLeft + PANEL_W - 56;
             UiKit.drawClamped(graphics, this.font,
                     Component.literal(preset.name().isEmpty() ? "?" : preset.name())
                             .withStyle(Style.EMPTY.withColor(preset.color())),
-                    this.panelLeft + 14, rowY + 5, UiKit.TEXT, PANEL_W - 152);
+                    this.panelLeft + 14, rowY + 5, UiKit.TEXT, PANEL_W - 192);
             Component entityName = ConfigValidator.displayEntityName(preset.entityType());
             String detail = (entityName == null ? preset.entityType() : entityName.getString())
                     + "  ·  " + preset.rules().size() + " " + Component.translatable("langtonanimal.gui.rules").getString();
             UiKit.drawClamped(graphics, this.font, Component.literal(detail),
-                    this.panelLeft + 14, rowY + 16, UiKit.TEXT_DIM, PANEL_W - 152);
+                    this.panelLeft + 14, rowY + 16, UiKit.TEXT_DIM, PANEL_W - 192);
 
-            int editX = this.panelLeft + PANEL_W - 118;
-            int deleteX = this.panelLeft + PANEL_W - 62;
             boolean editHovered = UiKit.inside(mouseX, mouseY, editX, rowY + 5, 50, 18);
+            boolean copyHovered = UiKit.inside(mouseX, mouseY, copyX, rowY + 5, 50, 18);
             boolean deleteHovered = UiKit.inside(mouseX, mouseY, deleteX, rowY + 5, 50, 18);
             UiKit.button(graphics, this.font, editX, rowY + 5, 50, 18,
                     Component.translatable("langtonanimal.gui.edit"), editHovered, true);
+            UiKit.button(graphics, this.font, copyX, rowY + 5, 50, 18,
+                    Component.translatable("langtonanimal.gui.copy"), copyHovered, true);
             UiKit.button(graphics, this.font, deleteX, rowY + 5, 50, 18,
                     Component.translatable("langtonanimal.gui.delete"), deleteHovered, true);
         }
@@ -219,11 +223,19 @@ public class PresetListScreen extends BaseScreen {
             int index = this.scroll + (int) ((mouseY - this.listTop) / ROW_H);
             if (index >= 0 && index < presets().size()) {
                 int rowY = this.listTop + (int) ((mouseY - this.listTop) / ROW_H) * ROW_H;
-                int editX = this.panelLeft + PANEL_W - 118;
-                int deleteX = this.panelLeft + PANEL_W - 62;
+                int editX = this.panelLeft + PANEL_W - 168;
+                int copyX = this.panelLeft + PANEL_W - 112;
+                int deleteX = this.panelLeft + PANEL_W - 56;
                 if (UiKit.inside(mouseX, mouseY, editX, rowY + 5, 50, 18)) {
                     this.minecraft.setScreen(new PresetEditScreen(this, presets().get(index),
                             this.currentDefaultBlock()));
+                    return true;
+                }
+                if (UiKit.inside(mouseX, mouseY, copyX, rowY + 5, 50, 18)) {
+                    AntPreset copy = presets().get(index).copy();
+                    copy.setName(this.copyName(copy.name()));
+                    presets().add(index + 1, copy);
+                    this.scroll = Math.max(0, Math.min(this.scroll, this.maxScroll()));
                     return true;
                 }
                 if (UiKit.inside(mouseX, mouseY, deleteX, rowY + 5, 50, 18)) {
@@ -251,6 +263,18 @@ public class PresetListScreen extends BaseScreen {
         return BlockPalette.normalize(this.defaultBlockBox == null
                 ? ClientState.draft().defaultBlockId()
                 : this.defaultBlockBox.getValue());
+    }
+
+    private String copyName(String base) {
+        String stem = base == null || base.isEmpty() ? "preset" : base;
+        for (int i = 1; i < 1000; i++) {
+            String candidate = stem + "_copy" + (i == 1 ? "" : String.valueOf(i));
+            if (ClientState.draft().findPreset(candidate) == null
+                    && !ClientState.liveNames().contains(candidate)) {
+                return candidate;
+            }
+        }
+        return stem + "_copy";
     }
 
     private String uniqueName() {

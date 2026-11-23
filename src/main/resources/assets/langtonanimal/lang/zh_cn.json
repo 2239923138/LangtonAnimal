@@ -6,6 +6,7 @@
   "langtonanimal.gui.reset_default": "恢复默认",
   "langtonanimal.gui.rules": "条规则",
   "langtonanimal.gui.edit": "编辑",
+  "langtonanimal.gui.copy": "复制",
   "langtonanimal.gui.delete": "删除",
   "langtonanimal.gui.empty_list": "还没有预设。点击「新建预设」开始配置。",
   "langtonanimal.gui.new_preset": "新建预设",
