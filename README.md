@@ -27,6 +27,10 @@
 
 ## 快速上手
 
+> [!IMPORTANT]
+>
+> 请使用超平坦世界!
+
 ```mcfunction
 # 在配置界面（默认按 L）里新建一个预设，或者直接用命令
 /langtona summon RL蚂蚁 ant_01 north 5
