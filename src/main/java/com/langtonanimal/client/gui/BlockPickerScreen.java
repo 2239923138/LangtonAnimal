@@ -114,6 +114,7 @@ public class BlockPickerScreen extends BaseScreen {
                 Component.translatable("langtonanimal.gui.cancel"), cancelHovered, true);
 
         if (hoveredName != null) {
+            graphics.flush();
             UiKit.tooltip(graphics, this.font, hoveredName, mouseX, mouseY);
         }
     }

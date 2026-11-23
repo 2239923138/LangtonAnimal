@@ -86,21 +86,21 @@ public final class ClientEvents {
         if (delta == 0) {
             return;
         }
-        int direction = delta > 0 ? 1 : -1;
+        boolean up = delta > 0;
         if (Screen.hasControlDown()) {
-            RodState.cycleMode(direction);
+            RodState.cycleMode(up ? -1 : 1);
             event.setCanceled(true);
             return;
         }
         if (Screen.hasAltDown()) {
-            RodState.cycleScope(direction);
+            RodState.cycleScope(up ? -1 : 1);
             event.setCanceled(true);
             return;
         }
         if (Screen.hasShiftDown() && RodState.mode() == RodState.MODE_SPEED) {
             String target = RodState.targetName();
             if (target != null) {
-                PacketDistributor.sendToServer(new AdjustSpeedPayload(target, direction));
+                PacketDistributor.sendToServer(new AdjustSpeedPayload(target, up ? 1 : -1));
                 event.setCanceled(true);
             }
         }

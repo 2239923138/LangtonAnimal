@@ -143,6 +143,7 @@ public class PresetListScreen extends BaseScreen {
         }
         String name = this.pendingDelete < presets().size()
                 ? presets().get(this.pendingDelete).name() : "";
+        graphics.flush();
         graphics.fill(0, 0, this.width, this.height, 0x99000000);
         int dialogW = 260;
         int dialogH = 92;

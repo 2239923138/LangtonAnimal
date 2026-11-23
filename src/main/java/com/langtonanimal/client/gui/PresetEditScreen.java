@@ -154,6 +154,7 @@ public class PresetEditScreen extends BaseScreen {
         renderPopup(graphics, mouseX, mouseY);
 
         if (this.hoveredTooltip != null && this.popup == POPUP_NONE) {
+            graphics.flush();
             graphics.drawString(this.font, this.hoveredTooltip, mouseX + 8, mouseY - 12, UiKit.TEXT_DIM, false);
         }
     }
@@ -193,6 +194,8 @@ public class PresetEditScreen extends BaseScreen {
         if (this.popup == POPUP_NONE) {
             return;
         }
+        // 规则行里的方块图标走独立的 RenderType，批次可能晚于 gui 批次刷新，先提交一次保证弹窗在上层
+        graphics.flush();
         graphics.fill(this.popupX, this.popupY, this.popupX + this.popupW, this.popupY + this.popupH, 0xF0101418);
         graphics.fill(this.popupX, this.popupY, this.popupX + this.popupW, this.popupY + 1, UiKit.PANEL_BORDER);
         graphics.fill(this.popupX, this.popupY + this.popupH - 1, this.popupX + this.popupW,
